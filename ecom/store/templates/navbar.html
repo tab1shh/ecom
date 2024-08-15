@@ -43,13 +43,41 @@
             role="button"
             data-bs-toggle="dropdown"
             aria-expanded="false"
-            >Shop</a
+            >Categories</a
           >
           <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-            <li><a class="dropdown-item" href="#!">All Products</a></li>
+            <li>
+              <a class="dropdown-item" href="{% url 'home' %}">All Products</a>
+            </li>
             <li><hr class="dropdown-divider" /></li>
-            <li><a class="dropdown-item" href="#!">Popular Items</a></li>
-            <li><a class="dropdown-item" href="#!">New Arrivals</a></li>
+            <li>
+              <a
+                class="dropdown-item"
+                href="{% url 'category' 'Mystery-Books' %}"
+                >Mystery Books</a
+              >
+            </li>
+            <li>
+              <a
+                class="dropdown-item"
+                href="{% url 'category' 'Thriller-Books' %}"
+                >Thriller Books</a
+              >
+            </li>
+            <li>
+              <a
+                class="dropdown-item"
+                href="{% url 'category' 'Dystopian-Books' %}"
+                >Dystopian Books</a
+              >
+            </li>
+            <li>
+              <a
+                class="dropdown-item"
+                href="{% url 'category' 'Fantasy-Books' %}"
+                >Fantasy Books</a
+              >
+            </li>
           </ul>
         </li>
       </ul>
