@@ -80,3 +80,9 @@ def category(request, foo):
     except:
         messages.success(request, ("Category Not Found"))
         return redirect("home")
+
+
+def category_list(request):
+
+    categories = Category.objects.all()
+    return render(request, "category_list.html", {"categories": categories})
