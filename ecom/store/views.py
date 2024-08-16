@@ -83,6 +83,5 @@ def category(request, foo):
 
 
 def category_list(request):
-
     categories = Category.objects.all()
     return render(request, "category_list.html", {"categories": categories})
