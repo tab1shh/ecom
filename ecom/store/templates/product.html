@@ -52,20 +52,26 @@
 
 <script>
   // check if button pressed
+  // attack a click event listener to the button with id 'add-cart'
   $(document).on('click', '#add-cart', function (e) {
+    // prevent the default button action (form submission)
     e.preventDefault();
+    // perform an AJAX POST request to the URL ampepdto the 'cart_add' view
     $.ajax({
       type: 'POST',
       url: "{% url 'cart_add' %}",
       data: {
-        product_id: $('#add-cart').val(),
-        product_qty: $('#qty-cart option:selected').text(),
-        csrfmiddlewaretoken: '{{ csrf_token }}',
-        action: 'post'
+        // data sent with the request
+        product_id: $('#add-cart').val(), // product ID of the item to add
+        product_qty: $('#qty-cart option:selected').text(), // selected quantity
+        csrfmiddlewaretoken: '{{ csrf_token }}', // token for sec
+        action: 'post' // indicated the type of action being performed
       },
       success: function (json) {
         // console.log(json) 
+        // update the cart quantity displayed on the page with the new quantity
         document.getElementById("cart_quantity").textContent = json.qty
+        // reload to relfect changes
         location.reload();
       },
       error: function (xhr, errmsg, err) {

@@ -16,7 +16,9 @@
     <center>
       <div class="col-8">
         <br /></br>
+        <!-- loop through all categories -->
         {% for category in categories %}
+        <!-- link to category page based on the category name -->
         <h3><a href="{% url 'category' category.name %}">{{ category }}</a></h3>
         {% endfor %}
         <br /></br>
