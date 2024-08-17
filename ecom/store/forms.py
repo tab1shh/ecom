@@ -105,6 +105,12 @@ class SignUpForm(UserCreationForm):
     def __init__(self, *args, **kwargs):
         super(SignUpForm, self).__init__(*args, **kwargs)
 
+        for field_name in self.fields:
+            self.fields[field_name].help_text = None
+
+        if "usable_password" in self.fields:
+            del self.fields["usable_password"]
+
         self.fields["username"].widget.attrs["class"] = "form-control"
         self.fields["username"].widget.attrs["placeholder"] = "User Name"
         self.fields["username"].label = ""
