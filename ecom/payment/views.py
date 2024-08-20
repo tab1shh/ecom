@@ -40,7 +40,6 @@ def billing_info(request):
                     "billing_form": billing_form,
                 },
             )
-            pass
 
         shipping_form = request.POST
 
