@@ -5,6 +5,8 @@ from django.contrib import messages
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
 from .forms import SignUpForm, UpdateUserForm, ChangePasswordForm, UserInfoForm
+from payment.forms import ShippingForm
+from payment.models import ShippingAddress
 from django import forms
 from django.db.models import Q
 import json
@@ -190,16 +192,23 @@ def update_info(request):
     if request.user.is_authenticated:
         # get the current user profile
         current_user = Profile.objects.get(user__id=request.user.id)
+        # get the current user shipping info
+        shipping_user = ShippingAddress.objects.get(user__id=request.user.id)
         # create a form pre filled with the user profile data
         form = UserInfoForm(request.POST or None, instance=current_user)
+        # create form pre filled with user shipping info
+        shipping_form = ShippingForm(request.POST or None, instance=shipping_user)
         # if form valid- save profile data, display msg, redirect to home page
-        if form.is_valid():
+        if form.is_valid() or shipping_form.is_valid():
             form.save()
+            shipping_form.save()
 
             messages.success(request, "Your Info Has Been Updated!")
             return redirect("home")
         # render the html with profile form
-        return render(request, "update_info.html", {"form": form})
+        return render(
+            request, "update_info.html", {"form": form, "shipping_form": shipping_form}
+        )
     else:
         messages.success(request, "You Must Be In Logged In To Access Page")
         return redirect("home")
