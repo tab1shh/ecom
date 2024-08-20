@@ -19,6 +19,28 @@ class Cart:
         # make sure cart is on all pages of site by assigning to instance var
         self.cart = cart
 
+    def db_add(self, product, quantity):
+        # convert to str for consistency
+        product_id = str(product)
+        product_qty = str(quantity)
+
+        # if the product is already in the cart, do nothing
+        if product_id in self.cart:
+            pass
+        else:
+            # self.cart[product_id] = {"price": str(product.price)}
+            # add the product to the cart with the specified quantity
+            self.cart[product_id] = int(product_qty)
+        # mark the session as modified to save changes
+        self.session.modified = True
+
+        # deal with logged in user
+        if self.request.user.is_authenticated:
+            current_user = Profile.objects.filter(user__id=self.request.user.id)
+            carty = str(self.cart)
+            carty = carty.replace("'", '"')
+            current_user.update(old_cart=str(carty))
+
     def add(self, product, quantity):
         # convert to str for consistency
         product_id = str(product.id)
@@ -98,6 +120,13 @@ class Cart:
         # mark the session as modified to save changes
         self.session.modified = True
 
+        # deal with logged in user
+        if self.request.user.is_authenticated:
+            current_user = Profile.objects.filter(user__id=self.request.user.id)
+            carty = str(self.cart)
+            carty = carty.replace("'", '"')
+            current_user.update(old_cart=str(carty))
+
         # return the updated cart
         return self.cart
 
@@ -110,3 +139,10 @@ class Cart:
 
         # mark the session as modified to save changes
         self.session.modified = True
+
+        # deal with logged in user
+        if self.request.user.is_authenticated:
+            current_user = Profile.objects.filter(user__id=self.request.user.id)
+            carty = str(self.cart)
+            carty = carty.replace("'", '"')
+            current_user.update(old_cart=str(carty))
