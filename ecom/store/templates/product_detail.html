@@ -1,0 +1,16 @@
+<!-- product_detail.html -->
+<h1>{{ product.name }}</h1>
+<!-- Display reviews -->
+{% for review in reviews %}
+<div>
+    <strong>{{ review.user.username }}:</strong> {{ review.rating }} stars
+    <p>{{ review.text }}</p>
+</div>
+{% endfor %}
+
+<!-- Review form -->
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Submit Review</button>
+</form>

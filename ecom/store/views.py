@@ -1,10 +1,18 @@
-from django.shortcuts import render, redirect
-from .models import Product, Category, Profile
+from django.shortcuts import render, redirect, get_object_or_404
+from .models import Product, Category, Profile, Review
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
-from .forms import SignUpForm, UpdateUserForm, ChangePasswordForm, UserInfoForm
+from django.core.paginator import Paginator
+from django.contrib.auth.decorators import login_required
+from .forms import (
+    SignUpForm,
+    UpdateUserForm,
+    ChangePasswordForm,
+    UserInfoForm,
+    ReviewForm,
+)
 from payment.forms import ShippingForm
 from payment.models import ShippingAddress
 from django import forms
@@ -106,8 +114,15 @@ def register_user(request):
 def product(request, pk):
     # fetch the product with the give pk from the DB
     product = Product.objects.get(id=pk)
+
+    reviews_list = product.reviews.all()
+
+    paginator = Paginator(reviews_list, 5)  # 5 reviews per page
+    page_number = request.GET.get("page")
+    reviews = paginator.get_page(page_number)
+
     # render the html page with product details
-    return render(request, "product.html", {"product": product})
+    return render(request, "product.html", {"product": product, "reviews": reviews})
 
 
 # click on a category name and it'll take you there
@@ -237,3 +252,20 @@ def search(request):
     else:
         # if the request is 'GET' display the search form
         return render(request, "search.html", {})
+
+
+@login_required
+def add_review(request, product_id):
+    product = get_object_or_404(Product, id=product_id)
+
+    if request.method == "POST":
+        rating = request.POST.get("rating")
+        text = request.POST.get("text")
+
+        Review.objects.create(
+            product=product, user=request.user, rating=rating, text=text
+        )
+        messages.success(request, "Your Review Has Been Added!")
+
+        return redirect("product", pk=product.id)
+    return redirect("product", pk=product.id)
