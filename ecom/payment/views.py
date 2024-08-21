@@ -4,6 +4,7 @@ from payment.forms import ShippingForm, PaymentForm
 from payment.models import ShippingAddress, Order, OrderItem
 from django.contrib.auth.models import User
 from django.contrib import messages
+from store.models import Product
 
 
 def process_order(request):
@@ -36,6 +37,26 @@ def process_order(request):
                 amount_paid=amount_paid,
             )
             create_order.save()
+            # get order ID and product info
+            order_id = create_order.pk
+            for product in cart_products():
+                product_id = product.id
+                if product.is_sale:
+                    price = product.sale_price
+                else:
+                    price = product.price
+
+                # get qty
+                for key, value in quantities().items():
+                    if int(key) == product.id:
+                        create_order_item = OrderItem(
+                            order_id=order_id,
+                            product_id=product_id,
+                            user=user,
+                            quantity=value,
+                            price=price,
+                        )
+                        create_order_item.save()
             messages.success(request, "Order Placed")
             return redirect("home")
         else:
@@ -46,6 +67,26 @@ def process_order(request):
                 amount_paid=amount_paid,
             )
             create_order.save()
+
+            order_id = create_order.pk
+            for product in cart_products():
+                product_id = product.id
+                if product.is_sale:
+                    price = product.sale_price
+                else:
+                    price = product.price
+
+                # get qty
+                for key, value in quantities().items():
+                    if int(key) == product.id:
+                        create_order_item = OrderItem(
+                            order_id=order_id,
+                            product_id=product_id,
+                            quantity=value,
+                            price=price,
+                        )
+                        create_order_item.save()
+
             messages.success(request, "Order Placed")
             return redirect("home")
     else:
