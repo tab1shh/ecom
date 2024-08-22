@@ -30,11 +30,11 @@ SECRET_KEY = "django-insecure-4i_kq&3qu!=k9o%anvw-$30t=1n_k_8jes+@i$g*h_$b)d+*zi
 DEBUG = True
 
 ALLOWED_HOSTS = [
-    "ecom-production-2bd4.up.railway.app",
-    "https://ecom-production-2bd4.up.railway.app",
+    "ecom-production-2d41.up.railway.app",
+    "https://ecom-production-2d41.up.railway.app",
 ]
 CSRF_TRUSTED_ORIGINS = [
-    "https://ecom-production-2bd4.up.railway.app",
+    "https://ecom-production-2d41.up.railway.app",
 ]
 
 
