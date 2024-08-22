@@ -57,6 +57,10 @@ def process_order(request):
                             price=price,
                         )
                         create_order_item.save()
+                        # delete cart
+                for key in list(request.session.keys()):
+                    if key == "session_key":
+                        del request.session[key]
             messages.success(request, "Order Placed")
             return redirect("home")
         else:
@@ -86,6 +90,11 @@ def process_order(request):
                             price=price,
                         )
                         create_order_item.save()
+
+            # delete cart
+            for key in list(request.session.keys()):
+                if key == "session_key":
+                    del request.session[key]
 
             messages.success(request, "Order Placed")
             return redirect("home")
