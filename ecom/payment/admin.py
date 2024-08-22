@@ -26,6 +26,7 @@ class OrderAdmin(admin.ModelAdmin):
         "amount_paid",
         "date_ordered",
         "shipped",
+        "date_shipped",
     ]
     inlines = [OrderItemInline]
 
