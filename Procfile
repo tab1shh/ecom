@@ -1,1 +1,1 @@
-web: python ecom/manage.py migrate && gunicorn ecom.wsgi:application --log-file - --log-level=debug
+web: python ecom/manage.py migrate && gunicorn ecom.wsg && gunicorn ecom.wsgi --log-file -
