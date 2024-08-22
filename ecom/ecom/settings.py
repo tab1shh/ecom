@@ -12,10 +12,13 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 
 from pathlib import Path
 import os
+from dotenv import load_dotenv
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+# load env var
+load_dotenv()
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
@@ -26,7 +29,14 @@ SECRET_KEY = "django-insecure-4i_kq&3qu!=k9o%anvw-$30t=1n_k_8jes+@i$g*h_$b)d+*zi
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    "ecom-production-2bd4.up.railway.app",
+    "https://ecom-production-2bd4.up.railway.app",
+]
+CSRF_TRUSTED_ORIGINS = [
+    "ecom-production-2bd4.up.railway.app",
+    "https://ecom-production-2bd4.up.railway.app",
+]
 
 
 # Application definition
@@ -41,6 +51,7 @@ INSTALLED_APPS = [
     "store",
     "cart",
     "payment",
+    "whitenoise.runserver_nostatic",
 ]
 
 MIDDLEWARE = [
@@ -51,6 +62,7 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "whitenoise.middleware.WhiteNoiseMiddleware",
 ]
 
 ROOT_URLCONF = "ecom.urls"
@@ -80,8 +92,14 @@ WSGI_APPLICATION = "ecom.wsgi.application"
 
 DATABASES = {
     "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
+        # "ENGINE": "django.db.backends.sqlite3",
+        # "NAME": BASE_DIR / "db.sqlite3",
+        "ENGINE": "django.db.backends.postgresql",
+        "NAME": "railway",
+        "USER": "postgres",
+        "PASSWORD": os.environ.get("DB_PASSWORD"),
+        "HOST": "autorack.proxy.rlwy.net",
+        "PORT": "17426",
     }
 }
 
@@ -122,6 +140,10 @@ USE_TZ = True
 
 STATIC_URL = "static/"
 STATICFILES_DIRS = ["static/"]
+
+# white noise
+STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
+STATIC_ROOT = BASE_DIR / "staticfiles"
 
 MEDIA_URL = "media/"
 MEDIA_ROOT = os.path.join(BASE_DIR, "media")
