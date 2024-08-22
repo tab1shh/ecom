@@ -1,1 +1,1 @@
-web: python manage.py migrate && gunicorn store.wsg && gunicorn store.wsgi --log-file -
+web: python ecom/manage.py migrate && gunicorn ecom.store.wsg && gunicorn ecom.store.wsgi --log-file -
