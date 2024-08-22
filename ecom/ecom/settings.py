@@ -34,7 +34,6 @@ ALLOWED_HOSTS = [
     "https://ecom-production-2bd4.up.railway.app",
 ]
 CSRF_TRUSTED_ORIGINS = [
-    "ecom-production-2bd4.up.railway.app",
     "https://ecom-production-2bd4.up.railway.app",
 ]
 
