@@ -32,6 +32,7 @@ DEBUG = True
 ALLOWED_HOSTS = [
     "ecom-production-2d41.up.railway.app",
     "https://ecom-production-2d41.up.railway.app",
+    "127.0.0.1",
 ]
 CSRF_TRUSTED_ORIGINS = [
     "https://ecom-production-2d41.up.railway.app",

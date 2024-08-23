@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from .models import Product, Category, Profile, Review
+from .models import Product, Category, Profile, Review, Wishlist, WishlistItem
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from django.contrib.auth.models import User
@@ -19,6 +19,40 @@ from django import forms
 from django.db.models import Q
 import json
 from cart.cart import Cart
+
+
+def add_to_wishlist(request, product_id):
+    if not request.user.is_authenticated:
+        messages.success(request, "You Must Be In Logged In To Use Feature")
+        return redirect("home")
+
+    product = get_object_or_404(Product, id=product_id)
+    wishlist, created = Wishlist.objects.get_or_create(user=request.user)
+    WishlistItem.objects.get_or_create(wishlist=wishlist, product=product)
+    messages.success(request, "Added to Wishlist")
+    return redirect("product", pk=product.id)
+
+
+def remove_from_wishlist(request, product_id):
+    if not request.user.is_authenticated:
+        messages.success(request, "You Must Be In Logged In To Use Feature")
+        return redirect("home")
+
+    product = get_object_or_404(Product, id=product_id)
+    wishlist = get_object_or_404(Wishlist, user=request.user)
+    WishlistItem.objects.filter(wishlist=wishlist, product=product).delete()
+    messages.success(request, "Removed from Wishlist")
+    return redirect("wishlist_view")
+
+
+def wishlist_view(request):
+    if not request.user.is_authenticated:
+        messages.success(request, "You Must Be In Logged In To Use Feature")
+        return redirect("home")
+
+    wishlist, created = Wishlist.objects.get_or_create(user=request.user)
+    items = WishlistItem.objects.filter(wishlist=wishlist)
+    return render(request, "wishlist.html", {"items": items})
 
 
 def home(request):

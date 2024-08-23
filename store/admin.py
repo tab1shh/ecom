@@ -1,5 +1,14 @@
 from django.contrib import admin
-from .models import Category, Customer, Product, Order, Profile, Review
+from .models import (
+    Category,
+    Customer,
+    Product,
+    Order,
+    Profile,
+    Review,
+    Wishlist,
+    WishlistItem,
+)
 from django.contrib.auth.models import User
 
 admin.site.register(Category)
@@ -8,6 +17,8 @@ admin.site.register(Product)
 admin.site.register(Review)
 admin.site.register(Order)
 admin.site.register(Profile)
+admin.site.register(Wishlist)
+admin.site.register(WishlistItem)
 
 
 # mix profile info and user info
